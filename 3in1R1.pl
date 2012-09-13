@@ -23,12 +23,12 @@ use File::Copy;
  ### my $xml_file = getstore($url, "C:\\acs\\nodes.xml");
 ############################## variables ##########################################
 my @Nodes = ();
-my $StartingDir = 'c:/temp/xmlfiles/';
+my $StartingDir = 'c:/temp/xmlfiles2/';
 my $ZipDir = $StartingDir . 'jcr_root/';
 my $BaseDir = $ZipDir . 'content/acs/';
 my $XMLfile = $StartingDir . 'nodes.xml';
 my $StructureFile = $StartingDir . 'ProdStructure.txt';
-my $ZippedFile = $StartingDir . 'prodstruct.zip';
+my $ZippedFile = $StartingDir . 'prodstruct2.zip';
 my $region1 = "";
 ############################## main ###############################################
 

@@ -1,6 +1,9 @@
 #!c:/strawberry/perl/bin/perl.exe 
 ###########################
 #  files 1_* 2_* and 3_* all together
+# this script creates the basic structure of the webstie from the sitepublish report
+# it also adds a generic content.xml file to the root of each directory
+# no files are downloaded need to also run parsearticle parsesuperarticle then stylemapping
 ###########################
 require LWP::UserAgent;
 use HTTP::Headers;
@@ -23,10 +26,10 @@ use File::Copy;
  ### my $xml_file = getstore($url, "C:\\acs\\nodes.xml");
 ############################## variables ##########################################
 my @Nodes = ();
-my $StartingDir = 'c:/temp/xmlfiles/';
-my $ZipDir = $StartingDir . 'jcr_root/';
-my $BaseDir = $ZipDir . 'content/acs/';
-my $XMLfile = $StartingDir . 'nodes.xml';
+my $StartingDir = 'C:\acs\bundles\prodstruct2';
+my $ZipDir = $StartingDir . '\jcr_root\\';
+my $BaseDir = $ZipDir . 'content/acs_steve/';
+my $XMLfile = 'C:\temp\nodesProd.xml';  # also called from super article parser
 my $StructureFile = $StartingDir . 'ProdStructure.txt';
 my $ZippedFile = $StartingDir . 'prodstruct.zip';
 my $region1 = "";
@@ -50,7 +53,7 @@ my $region1 = "";
   		print $FullDir . "\n";
 		push(@Nodes, $region1);
    		&mkdir_recursive($FullDir);
-		# &Write2File($region1);
+	   # &Write2File($region1);
 	}
  }
  close (MYFILE); 
@@ -69,13 +72,14 @@ my $region1 = "";
   
 
 ################################ EXPERIMENTAL #####################################
+sub Archive {
  use Archive::Zip;
  my $METAINF = $StartingDir . 'META-INF';
  my $zip = Archive::Zip->new();
  $zip->addTree( "$ZipDir", 'jcr_root' );
  $zip->addTree( "$METAINF", 'META-INF' );
  $zip->writeToFileNamed("$ZippedFile");
-
+}
 
 ################################ SUBS ############################################# 
 sub Write2File {
@@ -105,21 +109,23 @@ sub mkdir_recursive {
   	print $_ . "\n";
   	  if (-f ".content.xml") {
   	  	open (MYFILE, '>>.content.xml');
-  	  	print MYFILE $_ . "\n";
+  	  	print MYFILE  '<' . $_ . '/>' . "\n";
   	  	close (MYFILE); 
   	  } else {
   	    	 open (MYFILE, '>>.content.xml');
   	    	 print MYFILE '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-  	    	 print MYFILE '<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"' . "\n";
+			print MYFILE '<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:rep="internal"' . "\n";
+			print MYFILE '    jcr:mixinTypes="[rep:AccessControllable]"' . "\n";
   	    	 print MYFILE '    jcr:primaryType="cq:Page">' . "\n";
   	    	 print MYFILE '    <jcr:content' . "\n";
 			 print MYFILE '         cq:lastModifiedBy="admin"' . "\n";
-			 print MYFILE '		cq:template="/apps/geometrixx-outdoors/templates/page_home"' . "\n";
+			 print MYFILE '         cq:designPath="/etc/designs/acs"' . "\n";
+			 print MYFILE '		cq:template="/apps/acs/templates/acsPathway"' . "\n";
 			 print MYFILE '		jcr:isCheckedOut="{Boolean}true"' . "\n";
 			 print MYFILE '		jcr:mixinTypes="[mix:versionable]"' . "\n";
 			 print MYFILE '		jcr:primaryType="cq:PageContent">' . "\n";
     		 print MYFILE  '</jcr:content>' . "\n";
-	    	 print MYFILE $_ . "\n";
+	    	 print MYFILE  '<' . $_ . '/>' . "\n";
   	  	close (MYFILE); 
   	  }
   	  	
@@ -135,11 +141,11 @@ sub mkdir_recursive {
 	} else {
 	    open (MYFILE, '>>.content.xml');
 	  	print MYFILE '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-	  	print MYFILE '<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"' . "\n";
+	  print MYFILE '<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:rep="internal"' . "\n";
 	  	print MYFILE '    jcr:primaryType="cq:Page">' . "\n";
 	  	print MYFILE '    <jcr:content' . "\n";
 		print MYFILE '         cq:lastModifiedBy="admin"' . "\n";
-		print MYFILE '		cq:template="/apps/geometrixx-outdoors/templates/page_home"' . "\n";
+		print MYFILE '		cq:template="/apps/acs/templates/acsPathway"' . "\n";
 		print MYFILE '		jcr:isCheckedOut="{Boolean}true"' . "\n";
 		print MYFILE '		jcr:mixinTypes="[mix:versionable]"' . "\n";
 		print MYFILE '		jcr:primaryType="cq:PageContent">' . "\n";
@@ -150,3 +156,4 @@ sub mkdir_recursive {
 	return 0; # Did not find any subdirectory in this directory
 	}
   }
+  print time - $^T;

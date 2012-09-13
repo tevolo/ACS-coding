@@ -1,8 +1,9 @@
 #!c:/strawberry/perl/bin/perl.exe 
 ###########################
 # parses cms project to get 
-# landing pages and also 
-# region content
+# landing pages that are super articles and also writes a list of sueprarticles to SuperArticles.txt
+# this will also downlaod the stellent contentID file as html and gets the images from it while rewriting the urls
+# to do:::  do not save it as index.htm save it as the stellent contentID look in style mapping for code for that
 ###########################
 require LWP::UserAgent;
 use HTTP::Headers;
@@ -19,13 +20,13 @@ use File::Find qw(find);
 use File::Basename;
 use File::Copy;
 
-my $StartingDir = 'c:/acs/';
+my $StartingDir = 'c:/temp/';
 my $ZipDir = $StartingDir . 'SA/';
 my $BaseDir = $ZipDir . 'content/acs/';
 
 # my $url2 = "https://wcmsconsumpdev.acs.org/stellent/idcplg?IdcService=SS_GET_SITE_PUBLISH_REPORT&siteId=PublicWebSite";
 # my $xml_file = getstore($url, "C:\\apache\\apache2.2\\scripts\\project.xml");
- open (MYFILE, 'C:\acs\ss_project_acs.xml');
+ open (MYFILE, 'C:\temp\ss_project_acs.xml');
  while (<MYFILE>) {
  	chomp;
  	# print "$_\n";
@@ -39,7 +40,7 @@ my $BaseDir = $ZipDir . 'content/acs/';
 	# need to match node to url here then make the directory
 	&ParseXml($nodeID);
 		if ($line =~ m/region1=([A-Za-z0-9]+_\d+)/) {
-			$region1 = $1;
+			$region1 = $1;  # this is the stellent content ID
 		}
 		if ($line =~ m/urlDirName="([A-Za-z]+)\"/) {
 			$region2 = $1;
@@ -72,7 +73,7 @@ my $BaseDir = $ZipDir . 'content/acs/';
  }
  close (MYFILE); 
  sub Write2File {
-tie @lines, 'Tie::File', 'c:\acs\SuperArticles.txt' or die;
+tie @lines, 'Tie::File', 'c:\temp\SuperArticles.txt' or die;
         for (@lines) {
           if (/$_[0]\s/) {
             $_ .= "\r\n  $_[1] ";
@@ -83,12 +84,12 @@ tie @lines, 'Tie::File', 'c:\acs\SuperArticles.txt' or die;
 }
 
 sub Write2FileSA {
-	open (FILE, '>>c:\acs\SuperArticles.txt') or warn( "didnt open");
+	open (FILE, '>>c:\temp\SuperArticles.txt') or warn( "didnt open");
 	print FILE $_[0] . " " . $_[1] . " " . $_[2] . "\n";
 	close(FILE);
 }
 
-sub ImageLocal {
+sub ImageLocal {   # called from mkdir_SA  should probably merge into content.xml for images 
  $file = $_[0];
  open (IMFILE, "$file");
  open (OUT, '>>index.htm') or warn( "didnt open");
@@ -116,16 +117,16 @@ sub ImageLocal {
 	copy("index.htm","$file");
 }
 
-sub mkdir_SA {     
+sub mkdir_SA {     # this gets [assed the current directory and the stellent content ID
 	my $path = $_[0];  
 	# print $path;
 	mkdir $path or die "Could not make dir $path: $!" if not -d $path; 
 	chdir($path) or warn " not able to cd into $path \n";
 	my $fileName = $_[1] ;
-	my $wgetURL = 'https://wcmscontrib.acs.org/dc/' . $_[1]; 
+	my $wgetURL = 'https://wcmscontrib.acs.org/dc/' . $_[1];  # get the dynamic converted stellent content ID as html
+	if ($fileName ne "placeholder") {   # dont bother connecting if it is a dummy placeholder
 	system("wget -q --no-check-certificate -t 3 -T 30 -O $fileName $wgetURL") ;
-	if ($fileName ne "placeholder") {
-	&ImageLocal($fileName);
+	&ImageLocal($fileName);  # content ID
 	}
 	return;
 }  
@@ -156,12 +157,13 @@ sub ParseXml {
  }
  close (MYNODES); 
 }
-
+####  does this need to be here any more??????
 sub mkdir_recursive {     
 	$path = shift;  
-	# print $path;
+	 print $path;
 	mkdir_recursive(dirname($path)) if not -d dirname($path); 
 	mkdir $path or die "Could not make dir $path: $!" if not -d $path; 
 	return;
 }  
 
+print time - $^T;

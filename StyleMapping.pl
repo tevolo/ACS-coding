@@ -36,8 +36,9 @@ my $text0 = "false";
 $outfile = 'c:\acs\SA\.content.xml';
 my $imagearray = "false";
 my $listarray = "false";
+my $paraSpan= "false";
  &CreateContentHeader;
- open (MYARTICLE, 'C:\acs\SA\content\acs\careers\whatchemistsdo\profiles\CTP_004417');
+ open (MYARTICLE, 'C:\acs\SA\content\acs\meetings\expositions\CNBP_028491');
  while (<MYARTICLE>) {
  	chomp;
   if ($_ =~ m/<p>(.*)<\/p>/) {
@@ -100,9 +101,12 @@ my $listarray = "false";
 		push(@ListArray,$_);
 		next ;
 		 } 
-		&CheckHeadings($_);
-		&CheckPar($_);
-		
+		 if ($paraSpan eq "PARASPANTRUE") {
+		 	  $paraSpan = &CheckPar($_);
+			  next;
+		}
+		 CheckHeadings($_);
+		$paraSpan = &CheckPar($_);
 
  }
  close (MYARTICLE);
@@ -189,7 +193,7 @@ for $j (0 .. $#MultiPar ) {
 for $j (0 .. $#MultiPar ) {
 			for $k ( 1 .. $#{$MultiPar[$j]} ) {
 
-			#  print "$j $k     $MultiPar[$j][$k] \n";
+			   print "$j $k     $MultiPar[$j][$k] \n";
 				}
 			}
 
@@ -229,6 +233,7 @@ close (MYFILE);
 	# push(@{$MultiPar[$i]}, 'sling:resourceType="acs/components/pages/acsArticle">');
 	push(@{$MultiPar[$i]}, 'sling:resourceType="acs/components/pages/undergrad">');
 	push(@{$MultiPar[$i]}, "ENDTITLE");
+	$i++;
 	} elsif ($headings =~ m/<h2>(.*)<\/h2>/) {
 			$text = '&lt;h2>' . "$1" . '&lt;/h2>';
 			$i++;
@@ -264,16 +269,44 @@ close (MYFILE);
  
   sub CheckPar {
     $paragraph = $_[0];
-  	if ($paragraph =~ m/<p>(.*)<\/p>/) {
-		if($1=~/^\s*$/){
-		} else {
-		$i++;
-			$text = '&lt;p>' . "$1" . '&lt;/p>' . "\n";
+	if ($paragraph =~ m/<p>/) {
+		if ($paragraph =~ m/<p>(.*)<\/p>/) {
+			if($1=~/^\s*$/){
+			} else {
+			$i++;
+			$middle = $1;
+			$middle =~ s/</&lt;/g;       
+			$middle =~ s/br \/>//g;   
+			$text = '&lt;p>' . "$middle" . '&lt;/p>' . "\n";
 			push(@{$MultiPar[$i]}, "BEGINTEXT");
 			push(@{$MultiPar[$i]}, $text);
 			push(@{$MultiPar[$i]}, "ENDTEXT");
-		}
- 	} 	
+			return "PARASPANFALSE";
+			}
+		} else {
+		$i++;
+		$paragraph = m/<p>(.*)/ ;
+		$middle = $1;
+		$middle =~ s/</&lt;/g;       
+		$middle =~ s/br \/>//g; 
+		push(@{$MultiPar[$i]}, "BEGINTEXT");
+				push(@{$MultiPar[$i]}, $middle);	
+		return "PARASPANTRUE";
+			}
+	} elsif ($paragraph =~ m/(.*)<\/p>/) {
+		$middle = $1;
+		$middle =~ s/</&lt;/g;       
+		$middle =~ s/br \/>//g; 
+		push(@{$MultiPar[$i]}, $middle);
+		push(@{$MultiPar[$i]}, "ENDTEXT");
+		$i++;
+		return "PARASPANFALSE";
+	} else {
+		$paragraph =~ s/</&lt;/g;       
+		$paragraph =~ s/br \/>//g; 
+		push(@{$MultiPar[$i]}, $paragraph);	
+		return "PARASPANTRUE";
+	}
  }
  ####
 
@@ -302,6 +335,15 @@ close (MYFILE);
 			return "imagefinish"; 
 		}
   	elsif   ($span =~ m/<ul>/) {
+			if ($span =~ m/<ul>(.*)<\/ul>/) {
+			
+			$span = $1;
+			$span =~ s/</&lt;/g;        
+			$span =~ s/br \/>//g;   
+			print "\n $span  here I am steve \n";
+			push(@ListArray,$1);
+			return "listfinish"; 
+			}
 		$span =~ s/</&lt;/g;        
 		$span =~ s/br \/>//g;   
 		push(@ListArray,$span);

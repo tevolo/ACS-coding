@@ -33,7 +33,7 @@ my $imagearray = "false";
 my $listarray = "false";
  &CreateContentHeader;
 open (OUTFILE, ">>$outfile");
- open (MYARTICLE, 'C:\acs\SA\content\acs\careers\whatchemistsdo\profiles\CTP_004417');
+ open (MYARTICLE, 'C:\acs\SA\content\acs\careers\whatchemistsdo\profiles\CTP_004425');
  while (<MYARTICLE>) {
  	chomp;
   if ($_ =~ m/<p>(.*)<\/p>/) {

@@ -1,8 +1,8 @@
 #!c:/strawberry/perl/bin/perl.exe 
 ###########################
-# parses cms project to get 
-# landing pages and also 
-# region content
+# parses joson file for article as stellent contentIDs 
+# downlaods content id for articles and pdf's
+# should be run after superarticle
 ###########################
 require LWP::UserAgent;
 use HTTP::Headers;
@@ -19,24 +19,24 @@ use File::Find qw(find);
 use File::Basename;
 use File::Copy;
   my @array = "";
-my $StartingDir = 'c:/acs/';
+my $StartingDir = 'c:/temp/';
 my $ZipDir = $StartingDir . 'SA/';
 my $BaseDir = $ZipDir . 'content/acs/';
 
 # my $url2 = "https://wcmsconsumpdev.acs.org/stellent/idcplg?IdcService=SS_GET_SITE_PUBLISH_REPORT&siteId=PublicWebSite";
 # my $xml_file = getstore($url, "C:\\apache\\apache2.2\\scripts\\project.xml");
- open (MYJSON, 'C:\acs\articleJson.txt');
+ open (MYJSON, 'C:\temp\articleJason.txt');
  while (<MYJSON>) {
  	chomp;
 
 	if ($_ =~ m/\"([A-Za-z]+_[0-9]+)\"/) {
-	# $line = $_;
+	print  " line  $1 \n ";
 	$ContentID = $1;
 	}
-	if ($_ =~ m/\"Web Extension\" : \"(.*)\"/) {
+	if ($_ =~ m/\"Web Extension\": \"(.*)\"/) {
 			#if ($1 =~ m/(doc|pdf|docx)/) {
 			$extension = $1 ;
-			print $extension . "\n";
+			print "$extension  extension \n";
 			&count_unique($extension);
 			#} 
 	}
@@ -44,8 +44,8 @@ my $BaseDir = $ZipDir . 'content/acs/';
 		if ($_ =~ m/PublicWebSite:(.*)\"/) {
 		$node = $1 ;
 		# $node = 'node_id="' . $node . '"';
-		# print $ContentID . " " . $extension . " " . $node . "\n";
-		&FindFolder($node,$ContentID,$extension);
+		 print $ContentID . " " . $extension . " " . $node . "\n";
+		 &FindFolder($node,$ContentID,$extension);
 		}
 	}
  }
@@ -55,8 +55,8 @@ my $BaseDir = $ZipDir . 'content/acs/';
   $node2match = $_[0];
   $contentid = $_[1];
   $ext = $_[2];
-    $root = 'C:\acs\SA\content\acs\\';
-  open (MYNODE, 'C:\acs\nodesProd.xml');
+    $root = 'C:\temp\SA\content\acs\\';
+  open (MYNODE, 'C:\temp\nodesProd.xml');
 	while (<MYNODE>) {
  	chomp;
 		if ( $_ =~ m/\"$node2match\"/ ) {
@@ -65,15 +65,18 @@ my $BaseDir = $ZipDir . 'content/acs/';
 		# print " we have a match $node2match at $tempstub\n";
 		$newpath = $root . $tempstub;
 		chdir($newpath);
-			if ( $ext ne "pdf" ) {
+			if ( $ext eq "doc" or $ext eq "docx") {
 			my $wgetURL = 'https://wcmscontrib.acs.org/dc/' . $_[1]; 
-		#	system("wget -q --no-check-certificate -t 3 -T 30 -O $contentid $wgetURL") ;
+			system("wget -q --no-check-certificate -t 3 -T 30 -O $contentid $wgetURL") ;
 			
-			} else
+			} elsif ($ext eq "pdf") 
 			{
 			my $WgetURLpdf = 'https://wcmscontrib.acs.org/PublicWebSite/' . $tempstub . $_[1];
-		#	system("wget -q --no-check-certificate -t 3 -T 30 -O $contentid $WgetURLpdf") ;
-		$i++;
+			# system("wget -q --no-check-certificate -t 3 -T 30 -O $contentid $WgetURLpdf") ;
+			$i++;
+			} else 
+			{ 
+			print " something else \n";
 			}
 		}
 	
@@ -92,5 +95,5 @@ my $BaseDir = $ZipDir . 'content/acs/';
       #or just return the hash:
 
 }
-
+print time - $^T;
  

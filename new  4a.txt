@@ -1,0 +1,50 @@
+Œ 	&#338; 	&OElig; 	capital ligature OE
+œ 	&#339; 	&oelig; 	small ligature oe
+Š 	&#352; 	&Scaron; 	capital S with caron
+š 	&#353; 	&scaron; 	small S with caron
+Ÿ 	&#376; 	&Yuml; 	capital Y with diaeres
+ƒ 	&#402; 	&fnof; 	f with hook
+ˆ 	&#710; 	&circ; 	modifier letter circumflex accent
+˜ 	&#732; 	&tilde; 	small tilde
+  	&#8194; 	&ensp; 	en space
+  	&#8195; 	&emsp; 	em space
+? 	&#8201; 	&thinsp; 	thin space
+? 	&#8204; 	&zwnj; 	zero width non-joiner
+? 	&#8205; 	&zwj; 	zero width joiner
+? 	&#8206; 	&lrm; 	left-to-right mark
+? 	&#8207; 	&rlm; 	right-to-left mark
+– 	&#8211; 	&ndash; 	en dash
+— 	&#8212; 	&mdash; 	em dash
+‘ 	&#8216; 	&lsquo; 	left single quotation mark
+’ 	&#8217; 	&rsquo; 	right single quotation mark
+‚ 	&#8218; 	&sbquo; 	single low-9 quotation mark
+“ 	&#8220; 	&ldquo; 	left double quotation mark
+” 	&#8221; 	&rdquo; 	right double quotation mark
+„ 	&#8222; 	&bdquo; 	double low-9 quotation mark
+† 	&#8224; 	&dagger; 	dagger
+‡ 	&#8225; 	&Dagger; 	double dagger
+• 	&#8226; 	&bull; 	bullet
+… 	&#8230; 	&hellip; 	horizontal ellipsis
+‰ 	&#8240; 	&permil; 	per mille 
+' 	&#8242; 	&prime; 	minutes
+? 	&#8243; 	&Prime; 	seconds
+‹ 	&#8249; 	&lsaquo; 	single left angle quotation
+› 	&#8250; 	&rsaquo; 	single right angle quotation
+? 	&#8254; 	&oline; 	overline
+€ 	&#8364; 	&euro; 	euro
+™ 	&#8482;  	&trade; 	trademark
+? 	&#8592; 	&larr; 	left arrow
+? 	&#8593; 	&uarr; 	up arrow
+? 	&#8594; 	&rarr; 	right arrow
+? 	&#8595; 	&darr; 	down arrow
+? 	&#8596; 	&harr; 	left right arrow
+? 	&#8629; 	&crarr; 	carriage return arrow
+? 	&#8968; 	&lceil; 	left ceiling
+? 	&#8969; 	&rceil; 	right ceiling
+? 	&#8970; 	&lfloor; 	left floor
+? 	&#8971; 	&rfloor; 	right floor
+? 	&#9674; 	&loz; 	lozenge
+? 	&#9824; 	&spades; 	spade
+? 	&#9827; 	&clubs; 	club
+? 	&#9829; 	&hearts; 	heart
+? 	&#9830; 	&diams; 	diamond

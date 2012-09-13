@@ -1,0 +1,14 @@
+$ArtTitle =~ s/&Aring;/&#197;/g;
+$ArtTitle =~ s/&auml;/&#228;/g;
+$ArtTitle =~ s/&iuml;/&#239;/g;
+$ArtTitle =~ s/&ocirc;/&#212;/g;
+$ArtTitle =~ s/&egrave;/&#232;/g;
+$ArtTitle =~ s/&ograve;/&#242;/g;
+$ArtTitle =~ s/&atilde;/&#227;/g;
+$ArtTitle =~ s/&ccedil;/&#229;/g;
+$ArtTitle =~ s/&aring;/&#163;/g;
+$ArtTitle =~ s/&euml;/&#235;/g;
+$ArtTitle =~ s/&auml;/&#228;/g;
+$ArtTitle =~ s/&ouml;/&#246;/g;
+$ArtTitle =~ s/&acirc;/&#226;/g;
+$ArtTitle =~ s/&ldquo;/&#8220;/g;
