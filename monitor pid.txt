@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+# This script monitors file handles
+#
+        PID=$(cat conf/cq.pid 2>/dev/null)
+        if [ "$PID" ]; then
+                if ps -p $PID > /dev/null 2>&1; then
+                        echo "process ${PID} is  running"
+                else
+                echo "process ${PID} not running"
+                STOP_CODE=4
+            fi

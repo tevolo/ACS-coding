@@ -1,0 +1,15 @@
+curl -u admin:admin -F":operation=import" -F":contentType=json" -F":name=sampletest"  -F parentPath="/content/dam/geom
+etrixx/test"  -F title="steves test3" http://wit289:4802/bin/wcmcommand
+
+curl -F"testfile=@ycc.gif" http://admin:admin@localhost:8080//content/dam/geometrixx/test
+
+
+Content Updates are typically used in conjunction with an authoring system which "knows" what must be replaced.
+Files that are affected by a content update are removed, but not replaced immediately. The next time such a file is requested, the Dispatcher fetches the new file from the CQ instance and places it in the cache, thereby overwriting the old content.
+Typically, automatically generated pictures that incorporate text from a page are stored in picture files starting with the same handle - thus ensuring that the association exists for deletion. For example, you may store the title text of the page mypage.html as the picture mypage.titlePicture.gif in the same folder. This way the picture is automatically deleted from the cache each time the page is updated, so you can be sure that the picture always reflects the current version of the page.
+You may have several statfiles, for example one per language folder. If a page is updated, CQ looks for the next parent folder containing a statfile, and touches that file.
+
+
+Hi, on the publish instance, to change the redirect on "/" (root), you can set the following properties to the /content node:
+- sling:resourceType = sling:redirect
+- sling:target = /path/to/your/page

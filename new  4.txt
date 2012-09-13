@@ -1,0 +1,2 @@
+curl -u admin:admin -F cmd="createPage" -F label="" -F  parentPath="/content/geometrixx/en/company-F  template="/apps/geometrixx/templates/contentpage" -F title="ycc.vp http://wit289:4802/bin/wcmcommand
+curl -u admin:admin -F cmd="createPage" -F label="" -F parentPath="/content/geometrixx/en/company" -F template="/apps/geometrixx/templates/contentpage" -F title="steves test2" http://wit289:4802/bin/wcmcommand

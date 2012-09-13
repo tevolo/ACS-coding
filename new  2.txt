@@ -1,0 +1,4 @@
+curl -u admin:admin -F":operation=import" -F":contentType=json" -F":name=sampletest"  -F parentPath="/content/dam/geom
+etrixx/test"  -F title="steves test3" http://wit289:4802/bin/wcmcommand
+
+curl -F"testfile=@ycc.gif" http://admin:admin@localhost:8080//content/dam/geometrixx/test
