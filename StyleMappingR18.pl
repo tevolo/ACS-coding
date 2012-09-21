@@ -14,7 +14,7 @@
 # R17 change image right left center to not be seperate sections
 # R17 added regex to strip all nonstandard characters from directories being created 
 # R17 fixing image span classes
-#
+# R18 adding columns and embed
 $ERRORFILE = 'c:\temp\errors.txt';
 $FILES = 'c:\temp\files.txt';
 $DLwrapper = 'c:\temp\DLwrapper.txt';
@@ -109,6 +109,7 @@ $articletitle = $_[2];  # title from metadata
  print FILES "contentID=$filename cq5id=$name_cq5 url=$outfile \n";
  print LOGFILE " file being processed $filename \n";
 $spanhit = "false";
+$twocolumn = "false";
  $a = 0; #master counter
  $i = 0; #h tags
  $j = 0; # par tag
@@ -122,6 +123,21 @@ $spanhit = "false";
  $r = 0; # related content
  $s = 0; # embed
  $t = 0; # column
+#######################################
+#         my $root = HTML::TreeBuilder->new;
+#          $root->parse_file($filename);
+#			my @sc = $root->look_down('_tag', 'span', 'class', 'image-right');
+#	if (@sc) {
+#print "there was an image right in $filename \n";
+#$twocolumn = "true";
+#}
+#			my @sc = $root->look_down('_tag', 'span', 'class', 'related-content');
+#	if (@sc) {
+#print "there was related content in $filename \n";
+#$twocolumn = "true";
+#}
+#$root->delete();	
+####################################
   open (MYARTICLE, "$filename");
   open (MYOUTFILE, ">>$outfile");
  while (<MYARTICLE>) {
@@ -329,7 +345,7 @@ if ($_ =~ m/table>/) {
 
 if ($_ =~ m/<div class="related-content">/) {
 $relatedcontent = 1;
-print LOGFILE "related content container \n";
+print LOGFILE "related content container $filename \n";
 $a++;
 	$containercounter = 'acscontainer_' . "$a";
 	push(@MainPar,  '<' . $containercounter );
@@ -489,7 +505,7 @@ close(MYARTICLE);
 							$alt = $1;
 							print " alt is right $alt \n ";
 							}	
-                        					
+                      		
 						}
 						#	print 	"item is $item \n";					
                     } # end for loop
@@ -689,30 +705,30 @@ my $xmloutfile = $xmldir . '/' . '.content.xml' ;
 	&CloseTags();
 	&CreateContentHeader;
  	foreach (@MainPar) {
-			$_ =~ s/&ndash/&#821/gi; # <!-- en dash, U+2013 ISOpub -->' . "\n";
-			$_ =~ s/&mdash/&#8212/gi; #  <!-- em dash, U+2014 ISOpub -->' . "\n";
-			$_ =~ s/&lsquo/&#8216/gi; # <!-- left single quotation mark, U+2018 ISOnum -->' . "\n";
-			$_ =~ s/&rsquo/&#8217/gi; # <!-- right single quotation mark, U+2019 ISOnum -->' . "\n";
-			$_ =~ s/&sbquo/&#8218/gi; # <!-- single low-9 quotation mark,  U+201A NEW -->' . "\n";
-			$_ =~ s/&ldquo/&#8220/gi; # <!-- left double quotation mark, U+201C ISOnum -->' . "\n";
-			$_ =~ s/&rdquo/&#8221/gi; #<!-- right double quotation mark, U+201D ISOnum -->' . "\n";
-			$_ =~ s/&copy/&#169/gi; #<!-- copyright -->' . "\n";
-			$_ =~ s/&oacute/&#243/gi; #<-- unknown -->
-			$_ =~ s/&nbsp/&#160/gi; #<-- nonbreaking space -->
-			$_ =~ s/&pound/&#163/gi; #<-- pound  -->
-			$_ =~ s/&eacute/&#201/gi; #<-- latin e -->
-			$_ =~ s/&iacute/&#205/gi; #<-- latin i -->
-			$_ =~ s/&aacute/&#193/gi; #<-- latin a -->
-			$_ =~ s/&ntilde/&#209/gi; #<-- latin n -->
-			$_ =~ s/&uacute/&#218/gi; #<-- latin u -->
-			$_ =~  s/<br \/>//g;
-			$_ =~ s/&Uuml/&#220/gi; #<-- latin i -->
-			$_ =~ s/&minus;/&#8722;/g; #<-- latin a -->
-			$_ =~ s/&Yacute;/&#221;/g; #<-- latin n -->
-			$_ =~ s/&bull;/&#8226;/g; #<-- latin u -->	
-			$_ =~ s/&hellip;/&#8230;/g; #<-- latin n -->
-			$_ =~ s/&THORN;/&#222;/g; #<-- latin u -->		
-			$_ =~ s/&ouml;/&#246;/g; #<-- latin u -->	
+$_ =~ s/&ndash/&#821/gi; # <!-- en dash, U+2013 ISOpub -->' . "\n";
+$_ =~ s/&mdash/&#8212/gi; #  <!-- em dash, U+2014 ISOpub -->' . "\n";
+$_ =~ s/&lsquo/&#8216/gi; # <!-- left single quotation mark, U+2018 ISOnum -->' . "\n";
+$_ =~ s/&rsquo/&#8217/gi; # <!-- right single quotation mark, U+2019 ISOnum -->' . "\n";
+$_ =~ s/&sbquo/&#8218/gi; # <!-- single low-9 quotation mark,  U+201A NEW -->' . "\n";
+$_ =~ s/&ldquo/&#8220/gi; # <!-- left double quotation mark, U+201C ISOnum -->' . "\n";
+$_ =~ s/&rdquo/&#8221/gi; #<!-- right double quotation mark, U+201D ISOnum -->' . "\n";
+$_ =~ s/&copy/&#169/gi; #<!-- copyright -->' . "\n";
+$_ =~ s/&oacute/&#243/gi; #<-- unknown -->
+$_ =~ s/&nbsp/&#160/gi; #<-- nonbreaking space -->
+$_ =~ s/&pound/&#163/gi; #<-- pound  -->
+$_ =~ s/&eacute/&#201/gi; #<-- latin e -->
+$_ =~ s/&iacute/&#205/gi; #<-- latin i -->
+$_ =~ s/&aacute/&#193/gi; #<-- latin a -->
+$_ =~ s/&ntilde/&#209/gi; #<-- latin n -->
+$_ =~ s/&uacute/&#218/gi; #<-- latin u -->
+$_ =~  s/<br \/>//g;
+$_ =~ s/&Uuml/&#220/gi; #<-- latin i -->
+$_ =~ s/&minus;/&#8722;/g; #<-- latin a -->
+$_ =~ s/&Yacute;/&#221;/g; #<-- latin n -->
+$_ =~ s/&bull;/&#8226;/g; #<-- latin u -->	
+$_ =~ s/&hellip;/&#8230;/g; #<-- latin n -->
+$_ =~ s/&THORN;/&#222;/g; #<-- latin u -->		
+$_ =~ s/&ouml;/&#246;/g; #<-- latin u -->	
  $_ =~ s/&OElig;/&#338;/g;
 $_ =~ s/&oelig;/&#339;/g;
 $_ =~ s/&Scaron;/&#352;/g;
@@ -919,29 +935,29 @@ $_ =~ s/&ldquo;/&#8220;/g;
  } # end build it
  #############################################  start header #######################################################################
   sub CreateContentHeader {
-  			$ArtTitle =~ s/&ndash/&#821/gi; # <!-- en dash, U+2013 ISOpub -->' . "\n";
-			$ArtTitle =~ s/&mdash/&#8212/gi; #  <!-- em dash, U+2014 ISOpub -->' . "\n";
-			$ArtTitle =~ s/&lsquo/&#8216/gi; # <!-- left single quotation mark, U+2018 ISOnum -->' . "\n";
-			$ArtTitle =~ s/&rsquo/&#8217/gi; # <!-- right single quotation mark, U+2019 ISOnum -->' . "\n";
-			$ArtTitle =~ s/&sbquo/&#8218/gi; # <!-- single low-9 quotation mark,  U+201A NEW -->' . "\n";
-			$ArtTitle =~ s/&ldquo/&#8220/gi; # <!-- left double quotation mark, U+201C ISOnum -->' . "\n";
-			$ArtTitle =~ s/&rdquo/&#8221/gi; #<!-- right double quotation mark, U+201D ISOnum -->' . "\n";
-			$ArtTitle =~ s/&copy/&#169/gi; #<!-- copyright -->' . "\n";
-			$ArtTitle =~ s/&oacute/&#243/gi; #<-- unknown -->
-			$ArtTitle =~ s/&nbsp/&#160/gi; #<-- nonbreaking space -->
-			$ArtTitle =~ s/&pound/&#163/gi; #<-- pound  -->
-			$ArtTitle =~ s/&eacute/&#201/gi; #<-- latin e -->
-			$ArtTitle =~ s/&aacute/&#193/gi; #<-- latin a -->
-			$ArtTitle =~ s/&iacute/&#205/gi; #<-- latin i -->
-			$ArtTitle =~ s/&ntilde/&#209/gi; #<-- latin n -->
-			$ArtTitle =~ s/&uacute/&#218/gi; #<-- latin u -->
-			$ArtTitle =~ s/&Uuml/&#220/gi; #<-- latin i -->
-			$ArtTitle =~ s/&minus;/&#8722;/g; #<-- latin a -->
-			$ArtTitle =~ s/&Yacute;/&#221;/g; #<-- latin n -->
-			$ArtTitle =~ s/&bull;/&#8226;/g; #<-- latin u -->	
-			$ArtTitle =~ s/&hellip;/&#8230;/g; #<-- latin n -->
-			$ArtTitle =~ s/&THORN;/&#222;/g; #<-- latin u -->	
-			$ArtTitle =~ s/&OElig;/&#338;/g;
+$ArtTitle =~ s/&ndash/&#821/gi; # <!-- en dash, U+2013 ISOpub -->' . "\n";
+$ArtTitle =~ s/&mdash/&#8212/gi; #  <!-- em dash, U+2014 ISOpub -->' . "\n";
+$ArtTitle =~ s/&lsquo/&#8216/gi; # <!-- left single quotation mark, U+2018 ISOnum -->' . "\n";
+$ArtTitle =~ s/&rsquo/&#8217/gi; # <!-- right single quotation mark, U+2019 ISOnum -->' . "\n";
+$ArtTitle =~ s/&sbquo/&#8218/gi; # <!-- single low-9 quotation mark,  U+201A NEW -->' . "\n";
+$ArtTitle =~ s/&ldquo/&#8220/gi; # <!-- left double quotation mark, U+201C ISOnum -->' . "\n";
+$ArtTitle =~ s/&rdquo/&#8221/gi; #<!-- right double quotation mark, U+201D ISOnum -->' . "\n";
+$ArtTitle =~ s/&copy/&#169/gi; #<!-- copyright -->' . "\n";
+$ArtTitle =~ s/&oacute/&#243/gi; #<-- unknown -->
+$ArtTitle =~ s/&nbsp/&#160/gi; #<-- nonbreaking space -->
+$ArtTitle =~ s/&pound/&#163/gi; #<-- pound  -->
+$ArtTitle =~ s/&eacute/&#201/gi; #<-- latin e -->
+$ArtTitle =~ s/&aacute/&#193/gi; #<-- latin a -->
+$ArtTitle =~ s/&iacute/&#205/gi; #<-- latin i -->
+$ArtTitle =~ s/&ntilde/&#209/gi; #<-- latin n -->
+$ArtTitle =~ s/&uacute/&#218/gi; #<-- latin u -->
+$ArtTitle =~ s/&Uuml/&#220/gi; #<-- latin i -->
+$ArtTitle =~ s/&minus;/&#8722;/g; #<-- latin a -->
+$ArtTitle =~ s/&Yacute;/&#221;/g; #<-- latin n -->
+$ArtTitle =~ s/&bull;/&#8226;/g; #<-- latin u -->	
+$ArtTitle =~ s/&hellip;/&#8230;/g; #<-- latin n -->
+$ArtTitle =~ s/&THORN;/&#222;/g; #<-- latin u -->	
+$ArtTitle =~ s/&OElig;/&#338;/g;
 $ArtTitle =~ s/&oelig;/&#339;/g;
 $ArtTitle =~ s/&Scaron;/&#352;/g;
 $ArtTitle =~ s/&scaron;/&#353;/g;
@@ -1137,12 +1153,22 @@ $ArtTitle =~ s/&ldquo;/&#8220;/g;
 			 print XMLFILE '		jcr:mixinTypes="[mix:versionable]"' . "\n";
 			 print XMLFILE '		jcr:primaryType="cq:PageContent"' . "\n";
 			 print XMLFILE '		jcr:title="' . $ArtTitle . '"' . "\n";
+			 if ($twocolumn eq "true") {
+			 print XMLFILE '		articleLayout "2"' ."\n";
+			 print XMLFILE '		collapseFooter="o0"' ."\n";
+			}
 			 print XMLFILE '		sling:resourceType="acs/components/pages/acsArticle">' ."\n";
 			 print XMLFILE '		<articleContent' ."\n";
 			 print XMLFILE '		jcr:primaryType="nt:unstructured"' ."\n";
 			 print XMLFILE '		sling:resourceType="foundation/components/parsys">' ."\n";
-			 
-
+			 if ($twocolumn eq "true") {
+			 print XMLFILE '		<columnbootstrap' ."\n";
+			 print XMLFILE '		sling:resourceType="acs/components/general/columnsBootstrap"' ."\n";
+			 print XMLFILE '		columnConfiguration="o8x4">' . "\n";;
+			print XMLFILE '					<column' . $t  . "\n";
+            print XMLFILE '					jcr:primaryType="nt:unstructured"' . "\n";
+            print XMLFILE '					sling:resourceType="foundation/components/parsys">' . "\n";
+			}
 
 }
 sub GenericImage {
@@ -1310,6 +1336,9 @@ my $list = $_[0]; # list of all metadata on one line
 	}
 }
 sub CloseTags {
+	if ($twocolumn eq "true") {
+	push(@MainPar,'</columnbootstrap>' . "\n");
+	}
 	push(@MainPar,'</articleContent>' . "\n");
 	
 	if ($imagerighthit eq "true") {
